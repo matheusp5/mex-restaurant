@@ -1,7 +1,18 @@
+using MexRestaurant.API.Infrastructure;
+using MexRestaurant.API.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<SQLServerContext>(opt =>
+{
+    opt.UseMySql("server=localhost;user=root;database=mex_restaurant;password=root;",new MySqlServerVersion(new Version(8, 0, 11)));
+});
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<SQLServerContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
