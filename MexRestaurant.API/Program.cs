@@ -7,11 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<SQLServerContext>(opt =>
+builder.Services.AddDbContext<MySQLContext>(opt =>
 {
     opt.UseMySql("server=localhost;user=root;database=mex_restaurant;password=root;",new MySqlServerVersion(new Version(8, 0, 11)));
 });
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<SQLServerContext>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<MySQLContext>()
     .AddDefaultTokenProviders();
 
 var app = builder.Build();
@@ -33,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Products}/{action=Index}/{id?}");
 
 app.Run();

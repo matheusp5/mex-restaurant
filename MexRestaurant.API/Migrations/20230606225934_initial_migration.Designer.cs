@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MexRestaurant.API.Migrations
 {
-    [DbContext(typeof(SQLServerContext))]
+    [DbContext(typeof(MySQLContext))]
     [Migration("20230606225934_initial_migration")]
     partial class initial_migration
     {
