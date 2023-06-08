@@ -26,7 +26,7 @@ public class AuthController : Controller
     [HttpPost("register")]
     public async Task<RegisterResponse> Register([FromBody] RegisterDTO dto)
     {
-        var result = await this._userManager.CreateAsync(new()
+        IdentityResult result = await this._userManager.CreateAsync(new()
         {
             Email = dto.Email,
             UserName = dto.Username
@@ -34,10 +34,11 @@ public class AuthController : Controller
 
         if (result.Succeeded)
         {
+            ApplicationUser user = await this._userManager.FindByEmailAsync(dto.Email);
             return new()
             {
                 isSucceeded = true,
-                token = JWTHelper.GenerateJwtToken(dto.Email, dto.Username)
+                token = JWTHelper.GenerateJwtToken(dto.Email, dto.Username, user.Id)
             };
         }
 
@@ -61,7 +62,7 @@ public class AuthController : Controller
                 return new()
                 {
                     isApproved = result.Succeeded,
-                    token = JWTHelper.GenerateJwtToken(user.Email, user.UserName)
+                    token = JWTHelper.GenerateJwtToken(user.Email, user.UserName, user.Id)
                 };
             }
 
@@ -74,30 +75,5 @@ public class AuthController : Controller
         };
     }
 
-    [HttpPost("token")]
-    public TokenDecodedResponse Token([FromBody] TokenDTO dto)
-    {
-        try
-        {
-            List<Claim> claims = JWTHelper.ValidateJwtToken(dto.Token);
-            string email = claims.FirstOrDefault(c => c.Type == "UserEmail").Value;
-            string username = claims.FirstOrDefault(c => c.Type == "UserName").Value;
-
-            return new()
-            {
-                isSucceeded = true,
-                Email = email,
-                Username = username
-            };
-        }
-        catch (Exception e)
-        {
-            return new()
-            {
-                isSucceeded = false,
-                Email = "",
-                Username = ""
-            };
-        }
-    }
+    
 }

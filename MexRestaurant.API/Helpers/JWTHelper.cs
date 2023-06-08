@@ -9,7 +9,7 @@ public class JWTHelper
 {
     private const string SecretKey = "34653DASDSADSADSA78563DADHGFH2879DAS562ADNAS3475623HNRAS8DAS563GADSA85763285";
 
-    public static string GenerateJwtToken(string email, string username, int expiryMinutes = 60)
+    public static string GenerateJwtToken(string email, string username, string id, int expiryMinutes = 60)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(SecretKey);
@@ -19,7 +19,8 @@ public class JWTHelper
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim("UserEmail", email),
-                new Claim("UserName", username)
+                new Claim("UserName", username),
+                new Claim("UserId", id)
             }),
             Expires = DateTime.UtcNow.AddMinutes(expiryMinutes),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
