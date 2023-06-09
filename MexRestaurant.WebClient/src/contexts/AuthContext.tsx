@@ -1,17 +1,25 @@
+"use client"
 import User from "@/types/User";
+import {parseCookies, setCookie} from "nookies"
+import * as AuthServices from "@/requests/AuthRequest"
+import * as UserServices from "@/requests/UserRequest"
 import { createContext, useState } from "react";
+import AuthContextType from "@/types/AuthContextType";
 
-export const AuthContext = createContext({})
+const getUserFromCookies = async () => {
+  const {__user_mr} = parseCookies()
+  return await UserServices.DecodeToken(__user_mr)
+}
+
+export const AuthContext = createContext({} as AuthContextType)
 export const AuthProvider = ({children}: any) => {
-  
-  const [user, setUser] = useState<User>()
-  const Login = (email: string, password: string) => {
 
+  const [User, setUser] = useState<User>({email: "", id: "", username: ""})
+  if(User.email == "") {
+    getUserFromCookies().then(({isSucceeded, email, username, id}: UserServices.IDecodeToken) => {
+      if(isSucceeded) setUser({email,username,id})
+    })
   }
-  const Register = (email: string, username: string, password: string) => {
 
-  }
-
-  return <AuthContext.Provider value={{user, Login, Register}}>{children}</AuthContext.Provider>
-
+  return <AuthContext.Provider value={{User}}>{children}</AuthContext.Provider>
 }

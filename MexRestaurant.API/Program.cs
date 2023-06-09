@@ -1,6 +1,7 @@
 using MexRestaurant.API.Infrastructure;
 using MexRestaurant.API.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,10 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MySQLContext>(opt =>
 {
-    opt.UseMySql("server=localhost;user=root;database=mex_restaurant;password=root;",new MySqlServerVersion(new Version(8, 0, 11)));
+    opt.UseMySql("server=localhost;user=root;database=mex_restaurant;password=root;",
+        new MySqlServerVersion(new Version(8, 0, 11)));
 });
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<MySQLContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -27,6 +30,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseCors(c =>
+{
+    c.AllowAnyOrigin();
+    c.AllowAnyHeader();
+    c.AllowAnyMethod();
+});
 app.UseRouting();
 
 app.UseAuthorization();

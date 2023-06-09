@@ -1,7 +1,8 @@
 import User from "./User"
+import * as AuthServices from "@/requests/AuthRequest"
 
 type AuthContextType = {
-  Login: (email: string, password: string) => void
-  Register: (email: string, username: string, password: string) => void
   User: User
 }
+
+export default AuthContextType

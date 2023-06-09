@@ -1,9 +1,6 @@
+import { AuthProvider } from '@/contexts/AuthContext'
 import './globals.css'
-
-export const metadata = {
-  title: 'Mex Restaurant',
-  description: 'Mex Restaurant Client App',
-}
+import Header from '@/components/Header'
 
 export default function RootLayout({
   children,
@@ -11,8 +8,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-br">
-      <body>{children}</body>
-    </html>
+    <AuthProvider>
+      <html lang="pt-br">
+        <body>
+          <Header />
+          {children}
+        </body>
+      </html>
+    </AuthProvider>
   )
 }
