@@ -10,6 +10,9 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="pt-br">
+        <head>
+          <title>Mex Restaurant</title>
+        </head>
         <body>
           <Header />
           {children}

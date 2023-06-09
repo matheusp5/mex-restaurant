@@ -9,6 +9,7 @@ export default async function Home() {
       <div className="d-flex max-w-8xl mt-12 flex justify-around flex-wrap">
         {products.map((e: IProduct) =><Product key={e.productId} product={e} />)}
       </div>
+      
     </div>
   )
 }
